@@ -1,0 +1,16 @@
+2,Dowód osobisty,D,DOWÓD OSOBISTY
+3,Paszport,B,PASZPORT POLSKI
+11,Dowód tymczasowy,J,TYMCZASOWY DOWÓD OSOBISTY
+4,Karta pobytu,K,KARTA STAŁEGO POBYTU
+6,Zagraniczny dokument tożsamości,O,Zagraniczny dowód osobisty
+7,Prawo jazdy,C,PRAWO JAZDY
+13,Dowód osobisty dla obywatela UE,O,Zagraniczny dowód osobisty
+14,Karta pobytu dla obywatela UE,K,KARTA STAŁEGO POBYTU
+15,Paszport zagraniczny,G,PASZPORT ZAGRANICZNY
+16,Legitymacja szkolna,N,Legitymacja uczniowska
+18,Książeczka wojskowa,F,KSIĄŻECZKA WOJSKOWA
+19,Książeczka marynarska,H,KSIĄŻECZKA MARYNARZA
+12,Karta czasowego pobytu,Y,INNE
+0,Inne,Y,INNE
+98,Brak typu,Z,NIEZNANE
+99,Nie występuje,Z,NIEZNANE
