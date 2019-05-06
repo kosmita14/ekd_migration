@@ -44,10 +44,11 @@ BEGIN {
         "'" $4 "', " \
         "'" $5 "', " \
         "'" $6 "', " \
-        "NULL, CURRENT_TIMESTAMP, 'MIGRATION_RONLINE', NULL, NULL, NULL, NULL, NULL, " \
+        "NULL, CURRENT_TIMESTAMP, 'MIGRATION_RONLINE', " \
+        "'" globus_id "', "\
+        "NULL, NULL, NULL, NULL, " \
         "'" target_doc_type "', " \
         "'" $9 "', " \
         "NULL, 'MIGRATION_RONLINE', " \
         "'" $7 "')" > output_file;
-
 }
