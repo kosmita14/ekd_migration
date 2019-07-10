@@ -9,7 +9,7 @@ BEGIN {
     
     output_file = "aliases_20190709.sql";
 
-    globus_idm_id_file = "./dic/accounts_ronline_test.csv";
+    globus_idm_id_file = "./dic/idm_globus_mapping.csv";
 
 
     read_dict(globus_idm_id_file, globus_idm_id_arr, 3, 1, ",");

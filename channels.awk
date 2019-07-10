@@ -7,13 +7,15 @@ BEGIN {
     split("", account_ai2key_arr);
     split("", channel_status_arr);
     split("", channel_name_arr);
+
     output_file = "channels_20190709.sql";
-    globus_idm_id_file = "./dic/idm_globus_mapping.csv";
-    #account_ai2key_file = "./dic/account_ai2key.ext";
+    
+    globus_idm_id_file = "./dic/accounts_ronline_test.csv";
     channel_status_file = "./dic/channel_status.dic";
     channel_name_file = "./dic/channel_name.dic";
+    
+    
     read_dict(globus_idm_id_file, globus_idm_id_arr, 3, 1, ",");
-    #read_dict(account_ai2key_file, account_ai2key_arr, 2, 1, ",");
     read_dict(channel_status_file, channel_status_arr, 1, 2, ",");
     read_dict(channel_name_file, channel_name_arr, 1, 2, ",");
 }
