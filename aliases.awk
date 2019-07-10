@@ -4,15 +4,15 @@ BEGIN {
     FS = ",";
     RS = "[\r]*\n";
     
-    split("", glob_ai2key_arr);
-    split("", account_ai2key_arr);
+
+    split("", globus_idmid_arr);
     
     output_file = "aliases_20190709.sql";
-    globus_ai2key_file = "./dic/T_LKP_CUS_EQNUM_26.06.csv";
-    account_ai2key_file = "./dic/account_ai2key.ext";
 
-    read_dict(globus_ai2key_file, glob_ai2key_arr, 5, 2, ";");
-    read_dict(account_ai2key_file, account_ai2key_arr, 2, 1, ",");
+    globus_idm_id_file = "./dic/accounts_ronline_test.csv";
+
+
+    read_dict(globus_idm_id_file, globus_idm_id_arr, 3, 1, ",");
 }
 
 {
@@ -24,23 +24,16 @@ BEGIN {
     globus_id = $1;
     unid = $2;
 
-    if(globus_id in glob_ai2key_arr){
-        ai2key = glob_ai2key_arr[globus_id];
+    if(globus_id in globus_idm_id_arr){
+        idm_id = globus_idm_id_arr[globus_id];
     }else{
-        print "Brak mapowania dla klienta o globus_id: '" globus_id "' dla rekodru nr: '" FNR "'";
-        next;        
-    }
-
-    if(ai2key in account_ai2key_arr){
-        account_id = account_ai2key_arr[ai2key];
-    }else{
-        print "Brak mapowania dla rachunku o ai2key: '" ai2key "' dla rekodru nr: '" FNR "'";
+        print "Brak mapowania dla rachunku o globid: '" globus_id "' dla rekodru nr: '" FNR "'";
         next;        
     }
 
     print "INSERT INTO ALIASES(id, account, login, is_master, is_removed, audit_cu, audit_cd, audit_mu, audit_md) values (" \
         "SEQ_ALIASES_ID.nextval, " \
-        account_id ", " \
+        idm_id ", " \
         "'" unid "', " \
         "1, 0, 0, CURRENT_TIMESTAMP, 0, CURRENT_TIMESTAMP)" > output_file;
 
