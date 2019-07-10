@@ -9,13 +9,13 @@ BEGIN {
     split("", channel_status_arr);
     split("", channel_name_arr);
 
-    output_file = "channels.sql";
-    globus_ai2key_file = "./dic/globus_ai2key.ext";
+    output_file = "channels_20190709.sql";
+    globus_ai2key_file = "./dic/T_LKP_CUS_EQNUM_26.06.csv";
     account_ai2key_file = "./dic/account_ai2key.ext";
     channel_status_file = "./dic/channel_status.dic";
     channel_name_file = "./dic/channel_name.dic";
 
-    read_dict(globus_ai2key_file, glob_ai2key_arr, 2, 1, ",");
+    read_dict(globus_ai2key_file, glob_ai2key_arr, 5, 2, ";");
     read_dict(account_ai2key_file, account_ai2key_arr, 2, 1, ",");
     read_dict(channel_status_file, channel_status_arr, 1, 2, ",");
     read_dict(channel_name_file, channel_name_arr, 1, 2, ",");
@@ -61,14 +61,13 @@ BEGIN {
         next;        
     }
 
-    print "INSERT INTO ACCOUNT_CHANNELS (id, account, status, access_status, IS_REMOVED, audit_cu, audit_cd, audit_mu, audit_md, bad_pass_count, AUTHENTICATION, AUTHORIZATION, successful_login, FAILED_LOGIN, LAST_LOGOUT, ACTIVATION_DATE, REACTIVATION_DATE, BLOCK_REASON, BLOCK_DATE, RESET_BY, RESET_DATE, CHANNEL) values (" \
-        21000000 + FNR ", " \
-        "'" account_id "', " \
+    print "INSERT INTO ACCOUNT_CHANNELS (id, account, status, access_status, IS_REMOVED, audit_cu, audit_cd, audit_mu, audit_md, bad_pass_count, AUTHORIZATION, BLOCK_REASON, BLOCK_DATE, CHANNEL) values (" \
+       "SEQ_ACCOUNT_CHANNELS_ID.nextval, " \
+        account_id ", " \
         "'M', " \
         "'" target_channel_status "', " \
-        "0, 0, CURRENT_TIMESTAMP, 0, CURRENT_TIMESTAMP, 0, NULL, 'OTP', NULL, NULL, NULL, NULL, NULL, 'block reason'," \
+        "0, 0, CURRENT_TIMESTAMP, 0, CURRENT_TIMESTAMP, 0, 'OTP', 'block reason'," \
         "TO_DATE('" convert_date(source_date) "', 'YYYY-MM-DD'), " \
-        "NULL, NULL, " \
         "'" target_channel_name "')" > output_file;
 
 }

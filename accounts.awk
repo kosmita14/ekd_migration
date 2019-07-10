@@ -6,12 +6,13 @@ BEGIN {
     split("", doc_type_arr);
     split("", glob_ai2key_arr);
     
-    output_file = "accounts.sql";
+    output_file = "accounts_20190709.sql";
     doc_type_file = "./dic/doc_type.dic";
-    globus_ai2key_file = "./dic/globus_ai2key.ext";
+    #globus_ai2key_file = "./dic/globus_ai2key.ext";
+    globus_ai2key_file = "./dic/T_LKP_CUS_EQNUM_26.06.csv";
 
     read_dict(doc_type_file, doc_type_arr, 1, 3, ",");
-    read_dict(globus_ai2key_file, glob_ai2key_arr, 2, 1, ",");
+    read_dict(globus_ai2key_file, glob_ai2key_arr, 5, 2, ";");
 }
 
 {
@@ -36,19 +37,19 @@ BEGIN {
         next;        
     }
 
-    print "INSERT INTO accounts(id, AI2KEY, IS_REMOVED, STATUS, SALT, AUDIT_CU, AUDIT_CD, AUDIT_MU, AUDIT_MD, EQN, FIRST_NAME, LAST_NAME, PESEL, PHONE, ANTIPHISHING_IMAGE, CREATION_DATE, CREATED_BY, HADES_ID, DEFAULT_CARD, DEFAULT_ACCOUNT_NUMBER, ACTIVATED_BY, ACTIVATION_DATE, DOCUMENT_TYPE, DOCUMENT_NO, C5, CREATION_SYSTEM, EMAIL) values (" \
-        3000000 + FNR ", " \
+    print "INSERT INTO accounts(id, AI2KEY, IS_REMOVED, STATUS, AUDIT_CU, AUDIT_CD, AUDIT_MU, AUDIT_MD, FIRST_NAME, LAST_NAME, PESEL, PHONE, CREATION_DATE, CREATED_BY, HADES_ID, DOCUMENT_TYPE, DOCUMENT_NO, CREATION_SYSTEM, EMAIL, BRAND) values (" \
+        "SEQ_ACCOUNTS_ID.nextval, " \
         "'" ai2key "', " \
-        "0, 'A', NULL, 0, CURRENT_TIMESTAMP, 0, CURRENT_TIMESTAMP, NULL, " \
+        "0, 'A', 0, CURRENT_TIMESTAMP, 0, CURRENT_TIMESTAMP, " \
         "'" $3 "', " \
         "'" $4 "', " \
         "'" $5 "', " \
         "'" $6 "', " \
-        "NULL, CURRENT_TIMESTAMP, 'MIGRATION_RONLINE', " \
-        "'" globus_id "', "\
-        "NULL, NULL, NULL, NULL, " \
+        "CURRENT_TIMESTAMP, 'MIGRATION_RONLINE', " \
+        globus_id ", "\
         "'" target_doc_type "', " \
         "'" $9 "', " \
-        "NULL, 'MIGRATION_RONLINE', " \
-        "'" $7 "')" > output_file;
+        "'MIGRATION_RONLINE', " \
+        "'" $7 "', " \
+        "'RETAIL' );" > output_file;
 }

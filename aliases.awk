@@ -7,11 +7,11 @@ BEGIN {
     split("", glob_ai2key_arr);
     split("", account_ai2key_arr);
     
-    output_file = "aliases.sql";
-    globus_ai2key_file = "./dic/globus_ai2key.ext";
+    output_file = "aliases_20190709.sql";
+    globus_ai2key_file = "./dic/T_LKP_CUS_EQNUM_26.06.csv";
     account_ai2key_file = "./dic/account_ai2key.ext";
 
-    read_dict(globus_ai2key_file, glob_ai2key_arr, 2, 1, ",");
+    read_dict(globus_ai2key_file, glob_ai2key_arr, 5, 2, ";");
     read_dict(account_ai2key_file, account_ai2key_arr, 2, 1, ",");
 }
 
@@ -39,8 +39,8 @@ BEGIN {
     }
 
     print "INSERT INTO ALIASES(id, account, login, is_master, is_removed, audit_cu, audit_cd, audit_mu, audit_md) values (" \
-        8000000 + FNR ", " \
-        "'" account_id "', " \
+        "SEQ_ALIASES_ID.nextval, " \
+        account_id ", " \
         "'" unid "', " \
         "1, 0, 0, CURRENT_TIMESTAMP, 0, CURRENT_TIMESTAMP)" > output_file;
 
