@@ -11,8 +11,8 @@ function read_dict(file_name, result_array, col_from, col_to, sep){
         }
 
         if(conf_line_array[col_from] in result_array){
- #           print "Duplikat klucza '" conf_line_array[col_from] "' w pliku: '" file_name "'";
- #           exit 1;
+            print "Duplikat klucza '" conf_line_array[col_from] "' w pliku: '" file_name "'";
+            exit 1;
         }
 
         result_array[conf_line_array[col_from]] = conf_line_array[col_to];
