@@ -8,8 +8,8 @@ BEGIN {
     split("", glob_ai2key_arr);
     split("", glob_arr);
     
-    output_file = "accounts_20190715.sql";
-    output_file_csv = "accounts_20190715.csv";
+    output_file = "accounts_20190716.sql";
+    output_file_csv = "accounts_20190716.csv";
     doc_type_file = "./dic/doc_type.dic";
     #globus_ai2key_file = "./dic/globus_ai2key.ext";
     globus_ai2key_file = "./dic/T_LKP_CUS_EQNUM_26.06.csv";
@@ -26,6 +26,7 @@ BEGIN {
 
 {
     if(FNR == 1){
+        print "AI2KEY, STATUS, FIRST_NAME, LAST_NAME, PESEL, PHONE, HADES_ID, DOCUMENT_TYPE, DOCUMENT_NO, EMAIL" > output_file_csv;
         next;
     }
 
@@ -53,7 +54,7 @@ BEGIN {
     if(source_doc_type in doc_type_arr){
         target_doc_type = doc_type_arr[source_doc_type];
     }else{
-        print "Brak mapowania dla typu dokumentu: '" source_doc_type "' dla rekodru nr: '" FNR "'";
+        print "Brak mapowania dla typu dokumentu: '" source_doc_type "' dla klenta o globusid: '" globus_id "' rekodru nr: '" FNR "'";
         total_doc_map_error++;
         next;        
     }
@@ -74,19 +75,16 @@ BEGIN {
         "'" $7 "', " \
         "'RETAIL' );" > output_file;
 
-    print ai2key "," \
-        "0,A,0,CURRENT_TIMESTAMP,0,CURRENT_TIMESTAMP," \
-        $3 "," \
-        $4 "," \
-        $5 "," \
-        $6 "," \
-        "CURRENT_TIMESTAMP,MIGRATION_RONLINE," \
-        globus_id ","\
-        target_doc_type "," \
-        $9 "," \
-        "MIGRATION_RONLINE," \
-        $7 "," \
-        "RETAIL" > output_file_csv;
+    print ai2key ";" \
+        "A;" \
+        $3 ";" \
+        $4 ";" \
+        $5 ";" \
+        $6 ";" \
+        globus_id ";"\
+        target_doc_type ";" \
+        $9 ";" \
+        $7 > output_file_csv;
 
 
     total_cust_ok++;

@@ -1,6 +1,6 @@
 @include "migration_functions.awk"
 BEGIN {
-    FS = ",";
+    FS = ";";
     RS = "[\r]*\n";
     
     split("", globus_idmid_arr);
@@ -8,15 +8,16 @@ BEGIN {
     split("", channel_status_arr);
     split("", channel_name_arr);
 
-    output_file = "channels_20190714b.sql";
-    
+    output_file = "channels_20190716.sql";
+    output_file_csv = "channels_20190716.csv";
+
     total_rec = 0;
     total_doc_map_error = 0;
     total_cust_map_error = 0;
     total_cust_dup_error = 0;
     total_channel_ok = 0;
 
-    globus_idm_id_file = "./dic/idm_globus_mapping.csv";
+    globus_idm_id_file = "./dic/id_ai2key_hades.csv";
     channel_status_file = "./dic/channel_status.dic";
     channel_name_file = "./dic/channel_name.dic";
     
@@ -27,6 +28,7 @@ BEGIN {
 
 {
     if(FNR == 1){
+        print "account;status;access_status;IS_REMOVED;audit_cu;audit_mu;bad_pass_count;AUTHORIZATION;BLOCK_REASON;BLOCK_DATE;CHANNEL" > output_file_csv;
         next;
     }
 
@@ -68,6 +70,12 @@ BEGIN {
     }
 
     print generate_SQL(idm_id, target_channel_status, source_date, target_channel_name) > output_file;
+    print idm_id ";" \
+        "M;" \
+        target_channel_status ";" \
+        "0;0;0;0;OTP;block reason;" \
+        convert_date(source_date) ";" \
+        target_channel_name > output_file_csv;
 
     total_channel_ok++;
 }
