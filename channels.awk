@@ -8,8 +8,8 @@ BEGIN {
     split("", channel_status_arr);
     split("", channel_name_arr);
 
-    output_file = "channels_20190716.sql";
-    output_file_csv = "channels_20190716.csv";
+    output_file = "./out/channels_20190720.sql";
+    output_file_csv = "./out/channels_20190720.csv";
 
     total_rec = 0;
     total_doc_map_error = 0;

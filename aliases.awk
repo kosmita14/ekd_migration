@@ -6,13 +6,15 @@ BEGIN {
     
 
     split("", globus_idmid_arr);
+    split("", glob_rec_arr);
     
-    output_file = "aliases_20190716.sql";
-    output_file_csv = "aliases_20190716.csv";
+    output_file = "./out/aliases_20190720.sql";
+    output_file_csv = "./out/aliases_20190720.csv";
 
     globus_idm_id_file = "./dic/id_ai2key_hades.csv";
 
     total_rec = 0;
+    total_rec_dup = 0;
     total_cust_map_error = 0;
     total_cust_dup_error = 0;
     total_alias_ok = 0;
@@ -31,6 +33,14 @@ BEGIN {
     source_doc_type = $8;
     globus_id = $1;
     unid = $2;
+
+    if($0 in glob_rec_arr){
+        print "Duplikat rekordu: '" $0 "' w wierszu: '" FNR "' z rekordem w wierszu nr '" glob_rec_arr[$0] "'";
+        total_rec_dup++;
+        next;        
+    }else{
+        glob_rec_arr[$0] = FNR;
+    }
 
     if(globus_id in glob_arr){
         print "Duplikat klienta o globus_id: '" globus_id "' dla rekodru nr: '" FNR "' z rekordem nr '" glob_arr[globus_id] "'";
@@ -65,6 +75,7 @@ END {
     print "================================"
     print "Total records no: " total_rec;
     print "Total success aliases no: " total_alias_ok;
+    print "Total duplicated redords no: " total_rec_dup;
     print "Total duplicated customer err no: " total_cust_dup_error;
     print "Total customer mapping err no: " total_cust_map_error;
     print "Delta: " total_rec - total_alias_ok - total_cust_dup_error - total_cust_map_error - total_doc_map_error;

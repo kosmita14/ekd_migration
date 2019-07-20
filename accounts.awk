@@ -7,26 +7,28 @@ BEGIN {
     split("", doc_type_arr);
     split("", glob_ai2key_arr);
     split("", glob_arr);
-    
-    output_file = "accounts_20190716.sql";
-    output_file_csv = "accounts_20190716.csv";
+    split("", glob_rec_arr);
+
+    output_file = "./out/accounts_20190720.sql";
+    output_file_csv = "./out/accounts_20190720.csv";
     doc_type_file = "./dic/doc_type.dic";
-    #globus_ai2key_file = "./dic/globus_ai2key.ext";
-    globus_ai2key_file = "./dic/T_LKP_CUS_EQNUM_26.06.csv";
+
+    globus_ai2key_file = "./dic/T_LKP_CUS_EQNUM_20190720_DR2.csv";
 
     total_rec = 0;
+    total_rec_dup = 0;
     total_doc_map_error = 0;
     total_cust_map_error = 0;
     total_cust_dup_error = 0;
     total_cust_ok = 0;
 
     read_dict(doc_type_file, doc_type_arr, 1, 3, ",");
-    read_dict(globus_ai2key_file, glob_ai2key_arr, 5, 2, ";");
+    read_dict(globus_ai2key_file, glob_ai2key_arr, 5, 2, ",");
 }
 
 {
     if(FNR == 1){
-        print "AI2KEY, STATUS, FIRST_NAME, LAST_NAME, PESEL, PHONE, HADES_ID, DOCUMENT_TYPE, DOCUMENT_NO, EMAIL" > output_file_csv;
+        print "AI2KEY;STATUS;FIRST_NAME;LAST_NAME;PESEL;PHONE;HADES_ID;DOCUMENT_TYPE;DOCUMENT_NO;EMAIL" > output_file_csv;
         next;
     }
 
@@ -35,6 +37,14 @@ BEGIN {
     source_doc_type = $8;
     globus_id = $1;
 
+    if($0 in glob_rec_arr){
+        print "Duplikat rekordu: '" $0 "' w wierszu: '" FNR "' z rekordem w wierszu nr '" glob_rec_arr[$0] "'";
+        total_rec_dup++;
+        next;        
+    }else{
+        glob_rec_arr[$0] = FNR;
+    }
+
     if(globus_id in glob_arr){
         print "Duplikat klienta o globus_id: '" globus_id "' dla rekodru nr: '" FNR "' z rekordem nr '" glob_arr[globus_id] "'";
         total_cust_dup_error++;
@@ -42,6 +52,7 @@ BEGIN {
     }else{
         glob_arr[globus_id] = FNR;
     }
+
 
     if(globus_id in glob_ai2key_arr){
         ai2key = glob_ai2key_arr[globus_id];
@@ -94,8 +105,9 @@ END {
     print "================================"
     print "Total records no: " total_rec;
     print "Total success customer no: " total_cust_ok;
+    print "Total duplicated redords no: " total_rec_dup;
     print "Total duplicated customer err no: " total_cust_dup_error;
     print "Total customer mapping err no: " total_cust_map_error;
     print "Total document mapping err no: " total_doc_map_error;
-    print "Delta: " total_rec - total_cust_ok - total_cust_dup_error - total_cust_map_error - total_doc_map_error;
+    print "Delta: " total_rec - total_cust_ok - total_rec_dup - total_cust_dup_error - total_cust_map_error - total_doc_map_error;
 }
