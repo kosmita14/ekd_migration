@@ -78,5 +78,5 @@ END {
     print "Total duplicated redords no: " total_rec_dup;
     print "Total duplicated customer err no: " total_cust_dup_error;
     print "Total customer mapping err no: " total_cust_map_error;
-    print "Delta: " total_rec - total_alias_ok - total_cust_dup_error - total_cust_map_error - total_doc_map_error;
+    print "Delta: " total_rec - total_alias_ok - total_rec_dup - total_cust_dup_error - total_cust_map_error - total_doc_map_error;
 }

@@ -26,6 +26,8 @@ function convert_date(str_date){
     if (match(str_date, /^(..)\/(..)\/(..) (..):(..):(..)/, m)) {
         t = mktime("20" m[1] " " m[2] " " m[3] " " m[4] " " m[5] " " m[6]);
         return strftime("%F", t);
+    }else if(match(str_date, /^(....)-(..)-(..)/, m)){
+        return str_date;
     }else{
         print "Date format not match for: '" str_date "'";
         return "";

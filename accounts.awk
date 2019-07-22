@@ -9,8 +9,8 @@ BEGIN {
     split("", glob_arr);
     split("", glob_rec_arr);
 
-    output_file = "./out/accounts_20190720.sql";
-    output_file_csv = "./out/accounts_20190720.csv";
+    output_file = "./out/accounts_20190721.sql";
+    output_file_csv = "./out/accounts_20190721.csv";
     doc_type_file = "./dic/doc_type.dic";
 
     globus_ai2key_file = "./dic/T_LKP_CUS_EQNUM_20190720_DR2.csv";
@@ -18,6 +18,7 @@ BEGIN {
     total_rec = 0;
     total_rec_dup = 0;
     total_doc_map_error = 0;
+    total_doc_map_warning = 0;
     total_cust_map_error = 0;
     total_cust_dup_error = 0;
     total_cust_ok = 0;
@@ -65,9 +66,15 @@ BEGIN {
     if(source_doc_type in doc_type_arr){
         target_doc_type = doc_type_arr[source_doc_type];
     }else{
-        print "Brak mapowania dla typu dokumentu: '" source_doc_type "' dla klenta o globusid: '" globus_id "' rekodru nr: '" FNR "'";
-        total_doc_map_error++;
-        next;        
+        if (source_doc_type != "") {
+            print "Brak mapowania dla typu dokumentu: '" source_doc_type "' dla klenta o globusid: '" globus_id "' dla rekodru nr: '" FNR "'";
+            total_doc_map_error++;
+            next;
+        }
+        
+        target_doc_type = source_doc_type;
+        print "Warn: Pusty typ dokumentu: '" source_doc_type "' dla klenta o globusid: '" globus_id "' dla rekodru nr: '" FNR "'";
+        total_doc_map_warning++;        
     }
 
     print "INSERT INTO accounts(id, AI2KEY, IS_REMOVED, STATUS, AUDIT_CU, AUDIT_CD, AUDIT_MU, AUDIT_MD, FIRST_NAME, LAST_NAME, PESEL, PHONE, CREATION_DATE, CREATED_BY, HADES_ID, DOCUMENT_TYPE, DOCUMENT_NO, CREATION_SYSTEM, EMAIL, BRAND) values (" \
@@ -110,4 +117,7 @@ END {
     print "Total customer mapping err no: " total_cust_map_error;
     print "Total document mapping err no: " total_doc_map_error;
     print "Delta: " total_rec - total_cust_ok - total_rec_dup - total_cust_dup_error - total_cust_map_error - total_doc_map_error;
+    print "================================"
+    print "Total document mapping warn no: " total_doc_map_warning;
+    print "================================"
 }
